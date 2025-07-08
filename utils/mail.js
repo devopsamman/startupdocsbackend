@@ -112,8 +112,8 @@ exports.sendEmailUpdateOtp = async (data) => {
     <div style="margin: 0 auto">
         <div class="container">
             <div class="logo">
-                <img src="https://nivishka.com/images/nivishka-logo.png" style="width: 180px;"
-                    alt="Google Logo">
+                <img src="https://i.ibb.co/qY514byy/logoo.png" style="width: 180px;"
+                    alt="StartupDocs">
             </div>
             <div class="title">Verify your New Email</div>
             <hr style="opacity: 30%; margin-top: 3%; margin-bottom: 3%;" />
@@ -126,8 +126,7 @@ exports.sendEmailUpdateOtp = async (data) => {
             <div class="note">
                 If you find something suspicious, then you can ignore this email.
             </div>
-           <p class="footer">All rights reserved © 2024 | StartupDocs | No. 92 , 7th Cross, Basavanapura Main Road, 560036,
-            Bangalore, Karnataka</p>
+           <p class="footer">All rights reserved © 2025 | StartupDocs</p>
         </div>
     </div>
 </body>
@@ -223,8 +222,8 @@ exports.sendResetPasswordSuperAdmin = async (data) => {
       <div style="margin: 0 auto">
           <div class="container">
               <div class="logo">
-                  <img src="https://nivishka.com/images/nivishka-logo.png" style="width: 180px;"
-                      alt="Nivishka Logo">
+                  <img src="https://i.ibb.co/qY514byy/logoo.png" style="width: 180px;"
+                      alt="StartupDocs">
               </div>
               <div class="title">Reset Password</div>
               <hr style="opacity: 30%; margin-top: 3%; margin-bottom: 3%;" />
@@ -237,8 +236,7 @@ exports.sendResetPasswordSuperAdmin = async (data) => {
                   <br><br>
                   If you find something suspicious, then you can ignore this email.
               </div>
-             <p class="footer">All rights reserved © 2024 | StartupDocs | No. 92 , 7th Cross, Basavanapura Main Road, 560036,
-              Bangalore, Karnataka</p>
+             <p class="footer">All rights reserved © 2025 | StartupDocs</p>
           </div>
       </div>
   </body>
@@ -333,7 +331,7 @@ exports.sendOtpForUserSignup = async (data) => {
         <div class="container">
             <div class="logo">
                 <img src="https://i.ibb.co/qY514byy/logoo.png" style="width: 180px;"
-                    alt="StartupDocs Logo">
+                    alt="StartupDocs">
             </div>
             <div class="title">Verify your Email</div>
             <hr style="opacity: 30%; margin-top: 3%; margin-bottom: 3%;" />
