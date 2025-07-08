@@ -71,8 +71,12 @@ exports.verifyOtpToUserRegister = catchAsyncErrors(async (req, res, next) => {
 
         const user = await User.create({ ...req.body, user_id: "USER" + currentUniqueId });
 
+        console.log('user', user)
+
         if (user) {
-            await newAccountCreated({ email: user?.email, first_name: user?.first_name, last_name: user?.last_name });
+            const mail_data = await newAccountCreated({ email: user?.email, first_name: user?.first_name, last_name: user?.last_name });
+
+            console.log('mail_data', mail_data)
         }
 
         sendToken(user, 200, res, "User created Successfully");
@@ -185,7 +189,7 @@ exports.createUser = catchAsyncErrors(async (req, res, next) => {
         if (newUser) {
             try {
                 const mail_data = await newAccountCreated({ email: newUser?.email, first_name: newUser?.first_name, last_name: newUser?.last_name });
-           
+
                 // console.log('mail_data', mail_data)
             }
             catch (error) {
@@ -346,7 +350,7 @@ exports.sendResetPasswordEmail = catchAsyncErrors(async (req, res, next) => {
         }
 
         const token = jwt.sign({ id: user?._id }, process.env.JWT_SECRET_KEY, {
-            expiresIn: process.env.JWT_EXPIRES,
+            expiresIn: process.env.JWT_EXPIRE,
         });
 
         let mail_data = {
