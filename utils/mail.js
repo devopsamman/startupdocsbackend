@@ -332,8 +332,8 @@ exports.sendOtpForUserSignup = async (data) => {
     <div style="margin: 0 auto">
         <div class="container">
             <div class="logo">
-                <img src="https://www.leegal.co/images/logo.png" style="width: 180px;"
-                    alt="Leegal Logo">
+                <img src="https://i.ibb.co/qY514byy/logoo.png" style="width: 180px;"
+                    alt="StartupDocs Logo">
             </div>
             <div class="title">Verify your Email</div>
             <hr style="opacity: 30%; margin-top: 3%; margin-bottom: 3%;" />
@@ -343,7 +343,7 @@ exports.sendOtpForUserSignup = async (data) => {
                 Use this code to safely verify your email:
             </div>
             <div class="code">${otp}</div>
-           <p class="footer">All rights reserved © 2025 | Leegal</p>
+           <p class="footer">All rights reserved © 2025 | StartupDocs</p>
         </div>
     </div>
 </body>
@@ -365,7 +365,7 @@ exports.newAccountCreated = async (data) => {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome Letter - Leegal</title>
+    <title>Welcome Letter - StartupDocs</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -480,10 +480,10 @@ exports.newAccountCreated = async (data) => {
     <div style="margin: 0 auto">
         <div class="email-container">
             <div class="header">
-                <img src="https://www.leegal.co/images/logo.png" alt="Leegal">
+                <img src="https://i.ibb.co/qY514byy/logoo.png" alt="StartupDocs">
             </div>
             <div class="content">
-                <p class="heavy">Dear ${first_name} ${last_name}, Welcome to Leegal 🎉</p>
+                <p class="heavy">Dear ${first_name} ${last_name}, Welcome to StartupDocs 🎉</p>
                 
                 <p>
                 We’re thrilled to have you onboard and excited to be part of your journey toward establishing your U.S.-based LLC. Starting or expanding a business is a bold step, and we’re here to ensure it’s as smooth and seamless as possible.
@@ -502,13 +502,13 @@ exports.newAccountCreated = async (data) => {
                 </ul>
 
                 <p>
-                Thank you for choosing Leegal to be your partner in success. Let’s build something amazing together!
+                Thank you for choosing StartupDocs to be your partner in success. Let’s build something amazing together!
                 </p>
 
             </div>
 
             <div class="footer">
-                <p class="footer">All rights reserved © 2025 | Leegal</p>
+                <p class="footer">All rights reserved © 2025 | StartupDocs</p>
             </div>
         </div>
 
@@ -518,7 +518,7 @@ exports.newAccountCreated = async (data) => {
 </html>
 `
 
-    const subject = "Welcome to Leegal – Let’s Build Your Dream Business!"
+    const subject = "Welcome to StartupDocs – Let’s Build Your Dream Business!"
     return await sendMail({ to: email, subject, html: body });
 };
 
@@ -533,7 +533,7 @@ exports.orderReceived = async (data) => {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome Letter - Leegal</title>
+    <title>Welcome Letter - StartupDocs</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -648,7 +648,7 @@ exports.orderReceived = async (data) => {
     <div style="margin: 0 auto">
         <div class="email-container">
             <div class="header">
-                <img src="https://www.leegal.co/images/logo.png" alt="Leegal">
+                <img src="https://i.ibb.co/qY514byy/logoo.png" alt="StartupDocs">
             </div>
             <div class="content">
                 <p class="heavy">Dear ${first_name} ${last_name},</p>
@@ -826,7 +826,7 @@ exports.sharedDocument = async (data) => {
     <div style="margin: 0 auto">
         <div class="email-container">
             <div class="header">
-                <img src="https://www.leegal.co/images/logo.png" alt="Leegal">
+                <img src="https://i.ibb.co/qY514byy/logoo.png" alt="StartupDocs">
             </div>
             <div class="content">
                 <p class="heavy">Dear ${first_name} ${last_name},</p>
@@ -994,7 +994,7 @@ exports.sendResetPasswordUser = async (data) => {
         <div style="margin: 0 auto">
             <div class="email-container">
                 <div class="header">
-                    <img src="https://www.leegal.co/images/logo.png" alt="Leegal">
+                    <img src="https://i.ibb.co/qY514byy/logoo.png" alt="StartupDocs">
                 </div>
                 <div class="content">
                     <p style="font-size: 18px; font-weight: bold;">Dear ${first_name} ${last_name},</p>
@@ -1168,7 +1168,7 @@ exports.sendOrderToAdmin = async (data) => {
     <div style="margin: 0 auto">
         <div class="email-container">
             <div class="header">
-                <img src="https://www.leegal.co/images/logo.png" alt="Leegal">
+                <img src="https://i.ibb.co/qY514byy/logoo.png" alt="StartupDocs">
             </div>
             <div class="content">
                 <p class="heavy">Dear Admin,</p>
@@ -1331,7 +1331,7 @@ exports.sendCompanyFormedMail = async (data) => {
     <div style="margin: 0 auto">
         <div class="email-container">
             <div class="header">
-                <img src="https://www.leegal.co/images/logo.png" alt="Leegal">
+                <img src="https://i.ibb.co/qY514byy/logoo.png" alt="StartupDocs">
             </div>
             <div class="content">
                 <p class="heavy">Dear ${name},</p>
@@ -1505,7 +1505,7 @@ exports.sendContactMessage = async (data) => {
     <div style="margin: 0 auto">
         <div class="email-container">
             <div class="header">
-                <img src="https://www.leegal.co/images/logo.png" alt="Leegal">
+                <img src="https://i.ibb.co/qY514byy/logoo.png" alt="StartupDocs">
             </div>
             <div class="content">
                 <p class="heavy">Dear Admin,</p>
@@ -1664,7 +1664,7 @@ exports.sendEinMail = async (data) => {
     <div style="margin: 0 auto">
         <div class="email-container">
             <div class="header">
-                <img src="https://www.leegal.co/images/logo.png" alt="Leegal">
+                <img src="https://i.ibb.co/qY514byy/logoo.png" alt="StartupDocs">
             </div>
             <div class="content">
                 <p class="heavy">Dear ${first_name} ${last_name},</p>
