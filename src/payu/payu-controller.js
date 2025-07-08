@@ -31,7 +31,7 @@ exports.createHash = catchAsyncErrors(async (req, res, next) => {
 exports.success = catchAsyncErrors(async (req, res, next) => {
     try {
         console.log('req.body', req.body)
-        res.redirect('https://www.leegal.co/success')
+        res.redirect('https://www.startupdocs.io/success')
         // sendResponse(res, 200, "Payment Successfull", req.body);
     } catch (error) {
         return next(new ErrorHandler(error.message, 500));
@@ -41,7 +41,7 @@ exports.success = catchAsyncErrors(async (req, res, next) => {
 exports.failure = catchAsyncErrors(async (req, res, next) => {
     try {
         console.log('req.body', req.body)
-        res.redirect('https://www.leegal.co/failure')
+        res.redirect('https://www.startupdocs.io/failure')
         // sendResponse(res, 200, "Payment Failed", req.body);
     } catch (error) {
         return next(new ErrorHandler(error.message, 500));

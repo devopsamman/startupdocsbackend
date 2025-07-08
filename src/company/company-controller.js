@@ -395,7 +395,7 @@ exports.createPhonePePayment = catchAsyncErrors(async (req, res, next) => {
             merchantUserId: req.body.user_id,
             name: req.body.name,
             amount: req.body.amount * 100,
-            redirectUrl: `https://api.leegal.co/api/company/check-payment-status/${merchantTransactionId}/${merchant_id}`,
+            redirectUrl: `https://api.startupdocs.io/api/company/check-payment-status/${merchantTransactionId}/${merchant_id}`,
             redirectMode: 'POST',
             mobileNumber: req.body.number,
             paymentInstrument: {
@@ -469,10 +469,10 @@ exports.checkPhonePePaymentStatus = catchAsyncErrors(async (req, res, next) => {
     // CHECK PAYMENT TATUS
     axios.request(options).then(async (response) => {
         if (response.data.success === true) {
-            const url = `https://www.leegal.co/success`
+            const url = `https://www.startupdocs.io/success`
             return res.redirect(url)
         } else {
-            const url = `https://www.leegal.co/failure`
+            const url = `https://www.startupdocs.io/failure`
             return res.redirect(url)
         }
     })

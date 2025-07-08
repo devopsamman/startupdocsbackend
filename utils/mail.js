@@ -118,7 +118,7 @@ exports.sendEmailUpdateOtp = async (data) => {
             <div class="title">Verify your New Email</div>
             <hr style="opacity: 30%; margin-top: 3%; margin-bottom: 3%;" />
             <div class="message">
-                Nivishka Services received a request to <strong>Change email</strong>.
+                StartupDocs received a request to <strong>Change email</strong>.
                 <br><br>
                 Use this code to safely verify your new email:
             </div>
@@ -126,7 +126,7 @@ exports.sendEmailUpdateOtp = async (data) => {
             <div class="note">
                 If you find something suspicious, then you can ignore this email.
             </div>
-           <p class="footer">All rights reserved © 2024 | Nivishka Services | No. 92 , 7th Cross, Basavanapura Main Road, 560036,
+           <p class="footer">All rights reserved © 2024 | StartupDocs | No. 92 , 7th Cross, Basavanapura Main Road, 560036,
             Bangalore, Karnataka</p>
         </div>
     </div>
@@ -229,7 +229,7 @@ exports.sendResetPasswordSuperAdmin = async (data) => {
               <div class="title">Reset Password</div>
               <hr style="opacity: 30%; margin-top: 3%; margin-bottom: 3%;" />
               <div class="message">
-                  Nivishka Services received a request to <strong>Change password</strong>.
+                  StartupDocs received a request to <strong>Change password</strong>.
                   <br><br>
                   Use this link to safely reset your password: ${resetLink}
               </div>
@@ -237,7 +237,7 @@ exports.sendResetPasswordSuperAdmin = async (data) => {
                   <br><br>
                   If you find something suspicious, then you can ignore this email.
               </div>
-             <p class="footer">All rights reserved © 2024 | Nivishka Services | No. 92 , 7th Cross, Basavanapura Main Road, 560036,
+             <p class="footer">All rights reserved © 2024 | StartupDocs | No. 92 , 7th Cross, Basavanapura Main Road, 560036,
               Bangalore, Karnataka</p>
           </div>
       </div>
@@ -338,7 +338,7 @@ exports.sendOtpForUserSignup = async (data) => {
             <div class="title">Verify your Email</div>
             <hr style="opacity: 30%; margin-top: 3%; margin-bottom: 3%;" />
             <div class="message">
-                Leegal has received a request to verify <strong>${email}</strong>.
+                StartupDocs has received a request to verify <strong>${email}</strong>.
                 <br><br>
                 Use this code to safely verify your email:
             </div>
@@ -654,7 +654,7 @@ exports.orderReceived = async (data) => {
                 <p class="heavy">Dear ${first_name} ${last_name},</p>
                 
                 <p>
-                Thank you for placing your trust in Leegal! We’ve received your order for forming your U.S. LLC, and our team is now processing it.
+                Thank you for placing your trust in StartupDocs! We’ve received your order for forming your U.S. LLC, and our team is now processing it.
                 </p>
 
                 <b>Here is an overview of your recent order:</b>
@@ -676,17 +676,17 @@ exports.orderReceived = async (data) => {
                 </p>
 
                 <p>
-                If you have any questions in the meantime, don’t hesitate to reach out to our support team at info@leegal.co or directly through your dashboard.
+                If you have any questions in the meantime, don’t hesitate to reach out to our support team at info@startupdocs.io or directly through your dashboard.
                 </p>
 
                 <p>
-                Thank you for choosing Leegal as your trusted partner. We’re excited to help you bring your business vision to life!
+                Thank you for choosing StartupDocs as your trusted partner. We’re excited to help you bring your business vision to life!
                 </p>
 
             </div>
 
             <div class="footer">
-                <p class="footer">All rights reserved © 2025 | Leegal</p>
+                <p class="footer">All rights reserved © 2025 | StartupDocs</p>
             </div>
         </div>
 
@@ -711,7 +711,7 @@ exports.sharedDocument = async (data) => {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome Letter - Leegal</title>
+    <title>Welcome Letter - StartupDocs</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -840,17 +840,17 @@ exports.sharedDocument = async (data) => {
                 </p>
 
                 <p>
-                If you have any questions or need assistance accessing your dashboard, please don’t hesitate to contact our support team at info@leegal.co.
+                If you have any questions or need assistance accessing your dashboard, please don’t hesitate to contact our support team at info@startupdocs.io.
                 </p>
 
                 <p>
-                Thank you for choosing Leegal! We’re here to support you in every step of your business journey.
+                Thank you for choosing StartupDocs! We’re here to support you in every step of your business journey.
                 </p>
 
             </div>
 
             <div class="footer">
-                <p class="footer">All rights reserved © 2025 | Leegal</p>
+                <p class="footer">All rights reserved © 2025 | StartupDocs</p>
             </div>
         </div>
 
@@ -879,7 +879,7 @@ exports.sendResetPasswordUser = async (data) => {
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Welcome Letter - Leegal</title>
+        <title>Welcome Letter - StartupDocs</title>
     
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1019,16 +1019,16 @@ exports.sendResetPasswordUser = async (data) => {
                     </div>
 
                     <p style="font-size: 16px;">
-                        If you did not request a password reset, please ignore this email or contact our support team (info@leegal.co) if you have any concerns.
+                        If you did not request a password reset, please ignore this email or contact our support team (info@startupdocs.io) if you have any concerns.
                     </p>
 
                     <p style="font-size: 16px;">
-                        Thank you for choosing Leegal! We’re here to support you every step of the way.
+                        Thank you for choosing StartupDocs! We’re here to support you every step of the way.
                     </p>
                 </div>
     
                 <div class="footer">
-                    <p class="footer">All rights reserved © 2025 | Leegal</p>
+                    <p class="footer">All rights reserved © 2025 | StartupDocs</p>
                 </div>
             </div>
     
@@ -1053,7 +1053,7 @@ exports.sendOrderToAdmin = async (data) => {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome Letter - Leegal</title>
+    <title>Welcome Letter - StartupDocs</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1191,7 +1191,7 @@ exports.sendOrderToAdmin = async (data) => {
             </div>
 
             <div class="footer">
-                <p class="footer">All rights reserved © 2025 | Leegal</p>
+                <p class="footer">All rights reserved © 2025 | StartupDocs</p>
             </div>
         </div>
 
@@ -1202,7 +1202,7 @@ exports.sendOrderToAdmin = async (data) => {
 `
 
     const subject = "New Company Formation order received!"
-    return await sendMail({ to: 'leegalorg@gmail.com', subject, html: body });
+    return await sendMail({ to: 'support@startupdocs.io', subject, html: body });
 };
 
 
@@ -1216,7 +1216,7 @@ exports.sendCompanyFormedMail = async (data) => {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome Letter - Leegal</title>
+    <title>Welcome Letter - StartupDocs</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1352,17 +1352,17 @@ exports.sendCompanyFormedMail = async (data) => {
                 </ul>
 
                 <p>
-                If you have any questions or need guidance on the next steps for growing and managing your business, don’t hesitate to contact us at info@leegal.co or through your dashboard.
+                If you have any questions or need guidance on the next steps for growing and managing your business, don’t hesitate to contact us at info@startupdocs.io or through your dashboard.
                 </p>
 
                 <p>
-                Thank you for trusting Leegal as your partner in this journey. We’re excited to see your business flourish!
+                Thank you for trusting StartupDocs as your partner in this journey. We’re excited to see your business flourish!
                 </p>
 
             </div>
 
             <div class="footer">
-                <p class="footer">All rights reserved © 2025 | Leegal</p>
+                <p class="footer">All rights reserved © 2025 | StartupDocs</p>
             </div>
         </div>
 
@@ -1390,7 +1390,7 @@ exports.sendContactMessage = async (data) => {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome Letter - Leegal</title>
+    <title>Welcome Letter - StartupDocs</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1524,7 +1524,7 @@ exports.sendContactMessage = async (data) => {
             </div>
 
             <div class="footer">
-                <p class="footer">All rights reserved © 2025 | Leegal</p>
+                <p class="footer">All rights reserved © 2025 | StartupDocs</p>
             </div>
         </div>
 
@@ -1535,7 +1535,7 @@ exports.sendContactMessage = async (data) => {
 `
 
     const subject = "New Contact Message Received!"
-    return await sendMail({ to: 'leegalorg@gmail.com', subject, html: body });
+    return await sendMail({ to: 'support@startupdocs.io', subject, html: body });
 };
 
 
@@ -1549,7 +1549,7 @@ exports.sendEinMail = async (data) => {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome Letter - Leegal</title>
+    <title>Welcome Letter - StartupDocs</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1697,7 +1697,7 @@ exports.sendEinMail = async (data) => {
             </div>
 
             <div class="footer">
-                <p class="footer">All rights reserved © 2025 | Leegal</p>
+                <p class="footer">All rights reserved © 2025 | StartupDocs</p>
             </div>
         </div>
 
