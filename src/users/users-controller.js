@@ -133,8 +133,8 @@ exports.userLogin = catchAsyncErrors(async (req, res, next) => {
             });
         }
 
-        // Add redirect URL based on user role
-        const redirectUrl = user.role === 'admin' ? '/admin/dashboard' : '/user/dashboard';
+        // Add redirect URL based on user type
+        const redirectUrl = !user.is_user ? '/admin/dashboard' : '/user/dashboard';
         
         // Log successful login attempt
         console.log('Login successful for user:', {
@@ -153,7 +153,7 @@ exports.userLogin = catchAsyncErrors(async (req, res, next) => {
                         id: user._id,
                         name: user.name,
                         email: user.email,
-                        role: user.role,
+                        role: user.is_user ? 'user' : 'admin',
                         phone: user?.phone || "" 
                     },
                     process.env.JWT_SECRET_KEY,
