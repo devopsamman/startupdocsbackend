@@ -13,6 +13,9 @@ const authenticate = async (req, res, next) => {
             next(new ErrorHandler("Please login to continue", 400));
         }
 
+        // Debug log for JWT secret in auth middleware
+        console.log("JWT_SECRET value in auth middleware:", process.env.JWT_SECRET);
+        
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         if (!decoded) {
             next(new ErrorHandler("Please login to continue", 400));
