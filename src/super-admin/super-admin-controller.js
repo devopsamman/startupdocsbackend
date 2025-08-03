@@ -191,6 +191,7 @@ exports.getDashboardStats = catchAsyncErrors(async (req, res, next) => {
                         },
                     },
                 },
+                /// add something
                 {
                     $addFields: {
                         amountDouble: {
