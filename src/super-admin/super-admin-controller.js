@@ -139,7 +139,7 @@ exports.resetPassword = catchAsyncErrors(async (req, res, next) => {
         if (!token) {
             next(new ErrorHandler("No token found", 400));
         }
-        const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
         if (!decoded) {
             next(new ErrorHandler("Token is not valid", 400));
         }

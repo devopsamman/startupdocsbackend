@@ -148,7 +148,10 @@ exports.userLogin = catchAsyncErrors(async (req, res, next) => {
             success: true,
             data: {
                 user,
-                token: jwt.sign(
+                token: (() => {
+                    // Debug log for JWT secret
+                    console.log("JWT Secret is:", process.env.JWT_SECRET);
+                    return jwt.sign(
                     { 
                         id: user._id,
                         name: user.name,
@@ -156,9 +159,9 @@ exports.userLogin = catchAsyncErrors(async (req, res, next) => {
                         role: user.is_user ? 'user' : 'admin',
                         phone: user?.phone || "" 
                     },
-                    process.env.JWT_SECRET_KEY,
+                    process.env.JWT_SECRET,
                     { expiresIn: process.env.JWT_EXPIRE }
-                ),
+                )})(),
                 redirectUrl
             },
             message: "User Login Successfully"
@@ -401,7 +404,7 @@ exports.sendResetPasswordEmail = catchAsyncErrors(async (req, res, next) => {
             return res?.status(400).json({ status: false, message: "Email not exist" });
         }
 
-        const token = jwt.sign({ id: user?._id }, process.env.JWT_SECRET_KEY, {
+        const token = jwt.sign({ id: user?._id }, process.env.JWT_SECRET, {
             expiresIn: process.env.JWT_EXPIRE,
         });
 
@@ -428,7 +431,7 @@ exports.resetPassword = catchAsyncErrors(async (req, res, next) => {
         if (!token) {
             next(new ErrorHandler("No token found", 400));
         }
-        const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
         if (!decoded) {
             next(new ErrorHandler("Token is not valid", 400));
         }

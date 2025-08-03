@@ -13,7 +13,7 @@ const authenticate = async (req, res, next) => {
             next(new ErrorHandler("Please login to continue", 400));
         }
 
-        const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
         if (!decoded) {
             next(new ErrorHandler("Please login to continue", 400));
         }
