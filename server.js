@@ -6,7 +6,18 @@ const path = require("path");
 const app = express();
 
 // built-in middlewares
-app.use(cors());
+// Configure CORS
+app.use(cors({
+  origin: '*', // Allow all origins
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
+// Add request logging middleware
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.path} - Request received`);
+  next();
+});
 app.use(express.json({ limit: "50mb" }));
 app.use(morgan("dev"));
 app.use("/uploads", express.static(path.join(__dirname + "/uploads")));
@@ -44,8 +55,17 @@ app.use("/api/payu", payRoutes);
 connectDatabase();
 
 //create server//
+console.log('Starting server on port:', process.env.PORT);
+
+// Add error handling for the server
 const server = app.listen(process.env.PORT, () => {
   console.log("Server is running on port", process.env.PORT);
+}).on('error', (err) => {
+  if (err.code === 'EADDRINUSE') {
+    console.error(`Port ${process.env.PORT} is already in use. Please try a different port or kill the process using this port.`);
+  } else {
+    console.error('Server error:', err);
+  }
 });
 
-module.exports = app;
+module.exports = app

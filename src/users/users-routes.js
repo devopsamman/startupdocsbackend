@@ -9,7 +9,15 @@ router.post("/send-otp-to-register-user", sendOtpToUserRegister);
 
 router.post("/verify-otp-to-register-user", verifyOtpToUserRegister);
 
-router.post("/user-login", userLogin);
+// Debug middleware for user login route
+router.post("/user-login", (req, res, next) => {
+    console.log('User login request received:', {
+        body: req.body,
+        method: req.method,
+        path: req.path
+    });
+    next();
+}, userLogin);
 
 router.post("/create-user", createUser);
 

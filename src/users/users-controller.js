@@ -90,29 +90,81 @@ exports.userLogin = catchAsyncErrors(async (req, res, next) => {
     try {
         const { email, password } = req.body;
 
+        // Log login attempt
+        console.log('Login attempt for email:', email);
+
         if (!email || !password) {
-            return next(new ErrorHandler("Please enter email and password", 400));
+            console.log('Login failed: Missing email or password');
+            return res.status(400).json({
+                success: false,
+                message: "Please enter both email and password"
+            });
         }
 
         const user = await User.findOne({ email });
 
         if (!user) {
-            return res.status(400).json({ status: false, message: "Email not exist" });
+            console.log('Login failed: User not found for email:', email);
+            return res.status(400).json({
+                success: false,
+                message: "Invalid email or password"
+            });
         }
 
         const isMatch = await bcrypt.compare(password, user.password);
+        
+        // Log password match result (but not the actual password)
+        console.log('Password match result for user:', { email, matched: isMatch });
 
 
         if (!isMatch) {
-            return res.status(400).json({ status: false, message: "Invalid Password" });
+            console.log('Login failed: Invalid password for email:', email);
+            return res.status(400).json({
+                success: false,
+                message: "Invalid email or password"
+            });
         }
 
         if (user?.is_active === false) {
-            return res.status(400).json({ status: false, message: "User is Inactive" });
+            console.log('Login failed: Inactive user account for email:', email);
+            return res.status(400).json({
+                success: false,
+                message: "Your account is currently inactive. Please contact support."
+            });
         }
 
-        sendToken(user, 200, res, "User Login Successfully");
+        // Add redirect URL based on user role
+        const redirectUrl = user.role === 'admin' ? '/admin/dashboard' : '/user/dashboard';
+        
+        // Log successful login attempt
+        console.log('Login successful for user:', {
+            email: user.email,
+            role: user.role,
+            redirectUrl
+        });
+
+        // Send response with token and redirect URL
+        return res.status(200).json({
+            success: true,
+            data: {
+                user,
+                token: jwt.sign(
+                    { 
+                        id: user._id,
+                        name: user.name,
+                        email: user.email,
+                        role: user.role,
+                        phone: user?.phone || "" 
+                    },
+                    process.env.JWT_SECRET_KEY,
+                    { expiresIn: process.env.JWT_EXPIRE }
+                ),
+                redirectUrl
+            },
+            message: "User Login Successfully"
+        });
     } catch (error) {
+        console.error('Login Error:', error.message);
         return next(new ErrorHandler(error.message, 500));
     }
 })
