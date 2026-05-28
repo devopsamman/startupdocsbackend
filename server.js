@@ -51,6 +51,10 @@ app.use("/api/testimonial", testimonialRoutes);
 app.use("/api/newsletter", newsletterRoutes);
 app.use("/api/payu", payRoutes);
 
+// Error middleware
+const errorMiddleware = require("./middleware/error");
+app.use(errorMiddleware);
+
 //connect db
 connectDatabase();
 
