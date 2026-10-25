@@ -30,9 +30,9 @@ exports.createHash = catchAsyncErrors(async (req, res, next) => {
 
 exports.success = catchAsyncErrors(async (req, res, next) => {
     try {
-        console.log('req.body', req.body)
-        res.redirect('https://www.startupdocs.io/success')
-        // sendResponse(res, 200, "Payment Successfull", req.body);
+        console.log('PayU success received:', req.body);
+        const frontendUrl = process.env.FRONTEND_URL || 'https://startupdocs.in';
+        return res.redirect(`${frontendUrl}/success`);
     } catch (error) {
         return next(new ErrorHandler(error.message, 500));
     }
@@ -40,9 +40,9 @@ exports.success = catchAsyncErrors(async (req, res, next) => {
 
 exports.failure = catchAsyncErrors(async (req, res, next) => {
     try {
-        console.log('req.body', req.body)
-        res.redirect('https://www.startupdocs.io/failure')
-        // sendResponse(res, 200, "Payment Failed", req.body);
+        console.log('PayU failure received:', req.body);
+        const frontendUrl = process.env.FRONTEND_URL || 'https://startupdocs.in';
+        return res.redirect(`${frontendUrl}/failure`);
     } catch (error) {
         return next(new ErrorHandler(error.message, 500));
     }

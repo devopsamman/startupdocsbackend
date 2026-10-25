@@ -25,9 +25,10 @@ exports.createSuperAdmin = catchAsyncErrors(async (req, res, next) => {
             return next(new ErrorHandler("Admin email already exist.", 500));
         }
 
-        const newSuperAdmin = await SuperAdmin.create({ ...req.body, password: hash });
-
-        sendResponse(res, 200, "Admin created successfully", newSuperAdmin);
+        const adminData = newSuperAdmin.toObject ? newSuperAdmin.toObject() : { ...newSuperAdmin };
+        delete adminData.password;
+        delete adminData.__v;
+        sendResponse(res, 200, "Admin created successfully", adminData);
     } catch (error) {
         return next(new ErrorHandler(error.message, 500));
     }

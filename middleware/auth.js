@@ -5,39 +5,53 @@ const SuperAdmin = require('../src/super-admin/super-admin-model');
 
 const authenticate = async (req, res, next) => {
     try {
-        let token = req.header("Authorization");
+        const authHeader = req.header("Authorization");
+        let token = null;
 
-        token = token.split(' ')[1]
+        if (authHeader) {
+            if (authHeader.startsWith("Bearer ")) {
+                token = authHeader.split(" ")[1];
+            } else {
+                token = authHeader.trim();
+            }
+        } else if (req.cookies && req.cookies.token) {
+            token = req.cookies.token;
+        }
 
         if (!token) {
-            next(new ErrorHandler("Please login to continue", 400));
+            return next(new ErrorHandler("Please login to continue", 401));
         }
 
-        // Debug log for JWT secret in auth middleware
-        console.log("JWT_SECRET value in auth middleware:", process.env.JWT_SECRET);
-        
+        if (!process.env.JWT_SECRET) {
+            console.error("FATAL: JWT_SECRET environment variable is missing!");
+            return next(new ErrorHandler("Internal server authentication error", 500));
+        }
+
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        if (!decoded) {
-            next(new ErrorHandler("Please login to continue", 400));
+        if (!decoded || !decoded.id) {
+            return next(new ErrorHandler("Invalid authentication token", 401));
         }
 
-        const user = await User.findOne({ _id: decoded.id });
+        const user = await User.findById(decoded.id);
+        const superAdmin = !user ? await SuperAdmin.findById(decoded.id) : null;
 
-        const superAdmin = await SuperAdmin.findOne({ _id: decoded.id });
-
-        if (user) {
-            req.user = user;
+        if (!user && !superAdmin) {
+            return next(new ErrorHandler("User not found or authorization revoked", 401));
         }
 
-        if (superAdmin) {
-            req.user = superAdmin;
-        }
+        req.user = user || superAdmin;
+        req.userRole = superAdmin ? 'admin' : (user.role || 'user');
 
-        next();
+        return next();
     } catch (error) {
-        console.log(error);
-        res.status(401).json({ status: false, message: 'User Not Authorized' })
+        if (error.name === "TokenExpiredError") {
+            return res.status(401).json({ status: false, message: "Token expired. Please login again." });
+        }
+        if (error.name === "JsonWebTokenError") {
+            return res.status(401).json({ status: false, message: "Invalid token. Authorization failed." });
+        }
+        return res.status(401).json({ status: false, message: "User Not Authorized" });
     }
-}
+};
 
 module.exports = authenticate;

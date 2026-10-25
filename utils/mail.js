@@ -1,19 +1,19 @@
 const nodemailer = require("nodemailer");
 
 const transporter = nodemailer.createTransport({
-    host: "smtp.hostinger.com",
-    port: 465,
-    secure: true,
+    host: process.env.SMTP_HOST || "smtp.hostinger.com",
+    port: parseInt(process.env.SMTP_PORT || "465", 10),
+    secure: process.env.SMTP_SECURE === "false" ? false : true,
     auth: {
-        user: "info@startupdocs.io",
-        pass: "Happy@manjeet1amman#",
+        user: process.env.SMTP_USER || "info@startupdocs.io",
+        pass: process.env.SMTP_PASS || "Happy@manjeet1amman#",
     },
 });
 
 const sendMail = ({ to, subject, html }) => {
     return new Promise((resolve, reject) => {
         const mailOptions = {
-            from: 'StartupDocs <info@startupdocs.io>',
+            from: process.env.SMTP_FROM || `StartupDocs <${process.env.SMTP_USER || 'info@startupdocs.io'}>`,
             to,
             subject,
             html,

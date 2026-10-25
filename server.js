@@ -3,30 +3,93 @@ const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
 const path = require("path");
-const app = express()
-
-// built-in middlewares
-// Configure CORS
-app.use(cors({
-  origin: '*', // Allow all origins
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
-
-// Add request logging middleware
-app.use((req, res, next) => {
-  console.log(`${req.method} ${req.path} - Request received`);
-  next();
-});
-app.use(express.json({ limit: "50mb" }));
-app.use(morgan("dev"));
-app.use("/uploads", express.static(path.join(__dirname + "/uploads")));
-
-console.log({ filePath: path.join(__dirname + "/uploads") });
-
-//import routes
+const fs = require("fs");
+const helmet = require("helmet");
+const rateLimit = require("express-rate-limit");
+const mongoose = require("mongoose");
 const connectDatabase = require("./db/database");
 
+const app = express();
+
+// Ensure required upload directories exist on boot
+const uploadDirs = [
+  path.join(__dirname, "uploads"),
+  path.join(__dirname, "uploads", "passports"),
+  path.join(__dirname, "uploads", "documents")
+];
+uploadDirs.forEach((dir) => {
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+  }
+});
+
+// Security headers
+app.use(helmet({
+  crossOriginResourcePolicy: { policy: "cross-origin" }
+}));
+
+// Configure CORS for startupdocs.in, localhost, and env-defined origins
+const allowedOrigins = [
+  'https://startupdocs.in',
+  'https://www.startupdocs.in',
+  'http://localhost:3000',
+  'http://localhost:5173'
+];
+
+if (process.env.ALLOWED_ORIGINS) {
+  process.env.ALLOWED_ORIGINS.split(',').forEach((origin) => {
+    const trimmed = origin.trim();
+    if (trimmed && !allowedOrigins.includes(trimmed)) {
+      allowedOrigins.push(trimmed);
+    }
+  });
+}
+
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    return callback(new Error(`Origin ${origin} not allowed by CORS`));
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept']
+}));
+
+// Global Rate Limiting for API protection
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 1500,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { status: false, message: "Too many requests from this IP, please try again later." }
+});
+app.use("/api", apiLimiter);
+
+// Request body parsing
+app.use(express.json({ limit: "25mb" }));
+app.use(express.urlencoded({ extended: true, limit: "25mb" }));
+
+if (process.env.NODE_ENV !== "test") {
+  app.use(morgan("dev"));
+}
+
+// Static uploads serving
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
+// Render Liveness/Readiness Health Check Endpoint
+app.get("/health", (req, res) => {
+  const isDbConnected = mongoose.connection.readyState === 1;
+  res.status(isDbConnected ? 200 : 503).json({
+    status: isDbConnected ? "healthy" : "unhealthy",
+    database: isDbConnected ? "connected" : "disconnected",
+    uptime: Math.floor(process.uptime()),
+    timestamp: new Date().toISOString()
+  });
+});
+
+// Import API routes
 const userRoutes = require("./src/users/users-routes");
 const companyRoutes = require("./src/company/company-routes");
 const documentRoutes = require("./src/document/document-routes");
@@ -55,21 +118,52 @@ app.use("/api/payu", payRoutes);
 const errorMiddleware = require("./middleware/error");
 app.use(errorMiddleware);
 
-//connect db
-connectDatabase();
+// Server startup & Port binding
+const PORT = process.env.PORT || 5000;
 
-//create server//
-console.log('Starting server on port:', process.env.PORT);
+const startServer = async () => {
+  await connectDatabase();
 
-// Add error handling for the server
-const server = app.listen(process.env.PORT, () => {
-  console.log("Server is running on port", process.env.PORT);
-}).on('error', (err) => {
-  if (err.code === 'EADDRINUSE') {
-    console.error(`Port ${process.env.PORT} is already in use. Please try a different port or kill the process using this port.`);
-  } else {
-    console.error('Server error:', err);
-  }
+  const server = app.listen(PORT, () => {
+    console.log(`StartupDocs Backend running in ${process.env.NODE_ENV || 'production'} mode on port ${PORT}`);
+  });
+
+  server.on('error', (err) => {
+    if (err.code === 'EADDRINUSE') {
+      console.error(`Port ${PORT} is already in use. Please terminate conflicting process or use a different port.`);
+    } else {
+      console.error('Server error:', err);
+    }
+  });
+
+  // Graceful shutdown for zero-downtime Render deploys
+  const gracefulShutdown = (signal) => {
+    console.log(`${signal} received. Closing HTTP server and database connections...`);
+    server.close(async () => {
+      try {
+        await mongoose.connection.close(false);
+        console.log("Database connection closed cleanly. Process exiting.");
+      } catch (err) {
+        console.error("Error closing database connection:", err);
+      }
+      process.exit(0);
+    });
+  };
+
+  process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
+  process.on('SIGINT', () => gracefulShutdown('SIGINT'));
+};
+
+startServer();
+
+// Global unhandled crash guards
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
 });
 
-module.exports = app
+process.on('uncaughtException', (err) => {
+  console.error('Uncaught Exception thrown:', err);
+});
+
+module.exports = app;
+

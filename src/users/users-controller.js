@@ -39,14 +39,10 @@ exports.sendOtpToUserRegister = catchAsyncErrors(async (req, res, next) => {
         try {
             await sendOtpForUserSignup({ email: email, otp: currentUniqueId });
         } catch (mailErr) {
-            console.log("----------------------------------------");
-            console.log(`Email sending failed: ${mailErr.message}`);
-            console.log(`DEVELOPMENT BYPASS: OTP for ${email} is: ${currentUniqueId}`);
-            console.log("----------------------------------------");
+            console.error(`Email sending failed for ${email}:`, mailErr.message);
         }
 
-        sendResponse(res, 200, "OTP Sent Successfully", currentUniqueId);
-
+        sendResponse(res, 200, "OTP Sent Successfully", { email: email });
     } catch (error) {
         return next(new ErrorHandler(error.message, 500));
     }
@@ -151,14 +147,15 @@ exports.userLogin = catchAsyncErrors(async (req, res, next) => {
         });
 
         // Send response with token and redirect URL
+        const sanitizedUser = user.toObject ? user.toObject() : { ...user };
+        delete sanitizedUser.password;
+        delete sanitizedUser.__v;
+
         return res.status(200).json({
             success: true,
             data: {
-                user,
-                token: (() => {
-                    // Debug log for JWT secret
-                    console.log("JWT Secret is:", process.env.JWT_SECRET);
-                    return jwt.sign(
+                user: sanitizedUser,
+                token: jwt.sign(
                     { 
                         id: user._id,
                         name: user.name,
@@ -167,8 +164,8 @@ exports.userLogin = catchAsyncErrors(async (req, res, next) => {
                         phone: user?.phone || "" 
                     },
                     process.env.JWT_SECRET,
-                    { expiresIn: process.env.JWT_EXPIRE }
-                )})(),
+                    { expiresIn: process.env.JWT_EXPIRE || "7d" }
+                ),
                 redirectUrl
             },
             message: "User Login Successfully"
@@ -411,11 +408,8 @@ exports.sendResetPasswordEmail = catchAsyncErrors(async (req, res, next) => {
             return res?.status(400).json({ status: false, message: "Email not exist" });
         }
 
-        // Debug log for JWT secret
-        console.log("JWT_SECRET value:", process.env.JWT_SECRET);
-        
         const token = jwt.sign({ id: user?._id }, process.env.JWT_SECRET, {
-            expiresIn: process.env.JWT_EXPIRE,
+            expiresIn: process.env.JWT_EXPIRE || "1h",
         });
 
         let mail_data = {
@@ -439,17 +433,18 @@ exports.resetPassword = catchAsyncErrors(async (req, res, next) => {
         const { token, new_password } = req.body;
 
         if (!token) {
-            next(new ErrorHandler("No token found", 400));
+            return next(new ErrorHandler("No token found", 400));
         }
-        // Debug log for JWT secret
-        console.log("JWT_SECRET value:", process.env.JWT_SECRET);
-        
+
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        if (!decoded) {
-            next(new ErrorHandler("Token is not valid", 400));
+        if (!decoded || !decoded.id) {
+            return next(new ErrorHandler("Token is not valid", 400));
         }
 
         const user = await User.findById(decoded.id);
+        if (!user) {
+            return next(new ErrorHandler("User not found", 404));
+        }
 
         // Update the password
         const hash = await bcrypt.hash(new_password, 10);

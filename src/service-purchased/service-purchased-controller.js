@@ -119,19 +119,20 @@ exports.searchServicePurchased = catchAsyncErrors(async (req, res, next) => {
 
 exports.createPhonePePayment = catchAsyncErrors(async (req, res, next) => {
     try {
-
-        const salt_key = 'fec485a7-0ef4-47d8-ad85-f1925c931c38'
-        const merchant_id = 'M22WKFI8JR5F2'
+        const salt_key = process.env.PHONEPE_SALT_KEY || 'fec485a7-0ef4-47d8-ad85-f1925c931c38';
+        const merchant_id = process.env.PHONEPE_MERCHANT_ID || 'M22WKFI8JR5F2';
+        const salt_index = process.env.PHONEPE_SALT_INDEX || '1';
 
         const merchantTransactionId = req.body.transactionId;
+        const backendUrl = process.env.BACKEND_URL || 'https://startupdocsbackend.onrender.com';
 
         const data = {
             merchantId: merchant_id,
             merchantTransactionId: merchantTransactionId,
             merchantUserId: req.body.user_id,
             name: req.body.name,
-            amount: req.body.amount * 100,
-            redirectUrl: `https://api.startupdocs.io/api/service-purchased/check-payment-status/${merchantTransactionId}/${merchant_id}`,
+            amount: Math.round(Number(req.body.amount || 0) * 100),
+            redirectUrl: `${backendUrl}/api/service-purchased/check-payment-status/${merchantTransactionId}/${merchant_id}`,
             redirectMode: 'POST',
             mobileNumber: req.body.number,
             paymentInstrument: {
@@ -140,12 +141,12 @@ exports.createPhonePePayment = catchAsyncErrors(async (req, res, next) => {
         };
         const payload = JSON.stringify(data);
         const payloadMain = Buffer.from(payload).toString('base64');
-        const keyIndex = 1;
+        const keyIndex = salt_index;
         const string = payloadMain + '/pg/v1/pay' + salt_key;
         const sha256 = crypto.createHash('sha256').update(string).digest('hex');
         const checksum = sha256 + '###' + keyIndex;
 
-        const prod_URL = "https://api.phonepe.com/apis/hermes/pg/v1/pay"
+        const prod_URL = process.env.PHONEPE_HOST_URL || "https://api.phonepe.com/apis/hermes/pg/v1/pay";
         const options = {
             method: 'POST',
             url: prod_URL,
@@ -162,37 +163,41 @@ exports.createPhonePePayment = catchAsyncErrors(async (req, res, next) => {
         axios.request(options).then(function (response) {
             sendResponse(res, 200, "Payment Initiated", {
                 url: response.data.data.instrumentResponse.redirectInfo.url,
-            })
-
-        })
-            .catch(function (error) {
-                console.error(error);
             });
+        }).catch(function (error) {
+            console.error('PhonePe service payment error:', error.message);
+            return res.status(502).json({
+                status: false,
+                message: "Payment gateway error: " + (error.response?.data?.message || error.message)
+            });
+        });
 
     } catch (error) {
-        res.status(500).send({
+        return res.status(500).json({
             message: error.message,
             success: false
-        })
+        });
     }
 });
 
 
 exports.checkPhonePePaymentStatus = catchAsyncErrors(async (req, res, next) => {
+    const salt_key = process.env.PHONEPE_SALT_KEY || 'fec485a7-0ef4-47d8-ad85-f1925c931c38';
+    const salt_index = process.env.PHONEPE_SALT_INDEX || '1';
+    const frontendUrl = process.env.FRONTEND_URL || 'https://startupdocs.in';
 
-    const salt_key = 'fec485a7-0ef4-47d8-ad85-f1925c931c38'
+    const merchantTransactionId = req.params.merchantTransactionId;
+    const merchantId = req.params.merchantId;
 
-    const merchantTransactionId = req.params.merchantTransactionId
-    const merchantId = req.params.merchantId
-
-    const keyIndex = 1;
+    const keyIndex = salt_index;
     const string = `/pg/v1/status/${merchantId}/${merchantTransactionId}` + salt_key;
     const sha256 = crypto.createHash('sha256').update(string).digest('hex');
     const checksum = sha256 + "###" + keyIndex;
 
+    const hostUrl = process.env.PHONEPE_STATUS_URL || "https://api.phonepe.com/apis/hermes";
     const options = {
         method: 'GET',
-        url: `https://api.phonepe.com/apis/hermes/pg/v1/status/${merchantId}/${merchantTransactionId}`,
+        url: `${hostUrl}/pg/v1/status/${merchantId}/${merchantTransactionId}`,
         headers: {
             accept: 'application/json',
             'Content-Type': 'application/json',
@@ -202,15 +207,13 @@ exports.checkPhonePePaymentStatus = catchAsyncErrors(async (req, res, next) => {
     };
 
     axios.request(options).then(async (response) => {
-        if (response.data.success === true) {
-            const url = `https://www.startupdocs.io/success-v2`
-            return res.redirect(url)
+        if (response.data && response.data.success === true) {
+            return res.redirect(`${frontendUrl}/success-v2`);
         } else {
-            const url = `https://www.startupdocs.io/failure-v2`
-            return res.redirect(url)
+            return res.redirect(`${frontendUrl}/failure-v2`);
         }
-    })
-        .catch((error) => {
-            console.error(error);
-        });
+    }).catch((error) => {
+        console.error('PhonePe service status error:', error.message);
+        return res.redirect(`${frontendUrl}/failure-v2`);
+    });
 });

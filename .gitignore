@@ -1,3 +1,11 @@
 node_modules
 .env
+.env.local
 jwt-token.js
+.DS_Store
+*.log
+Archive.zip
+uploads/*
+!uploads/passports
+!uploads/documents
+!uploads/**/.gitkeep
